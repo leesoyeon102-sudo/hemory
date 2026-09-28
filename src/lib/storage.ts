@@ -1,7 +1,7 @@
 import { Account, ForgetLog } from "./types";
 
-const ACCOUNTS_KEY = "hemory:accounts";
-const LOGS_KEY = "hemory:logs";
+const ACCOUNTS_KEY = "hemmory:accounts";
+const LOGS_KEY = "hemmory:logs";
 
 function safeParse<T>(raw: string | null, fallback: T): T {
   if (!raw) return fallback;

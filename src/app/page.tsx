@@ -25,7 +25,7 @@ export default function Home() {
             내 계정 목록
           </h1>
           <p className="mt-1 text-sm text-neutral-500">
-            까먹기 전에 Hemory에 저장해두세요 🐹
+            까먹기 전에 Hemmory에 저장해두세요 🐹
           </p>
         </div>
         <Link

@@ -18,7 +18,7 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-1.5 text-lg font-extrabold text-amber-600"
         >
-          <span>🐹</span> Hemory
+          <span>🐹</span> Hemmory
         </Link>
         <nav className="flex items-center gap-1">
           {NAV_ITEMS.map((item) => (
