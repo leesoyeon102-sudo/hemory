@@ -17,9 +17,14 @@ export function loadAccounts(): Account[] {
   return safeParse<Account[]>(window.localStorage.getItem(ACCOUNTS_KEY), []);
 }
 
-export function saveAccounts(accounts: Account[]) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+export function saveAccounts(accounts: Account[]): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function loadLogs(): ForgetLog[] {

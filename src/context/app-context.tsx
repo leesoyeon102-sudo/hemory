@@ -89,14 +89,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
         createdAt: now,
         updatedAt: now,
       };
-      setPersisted((prev) => ({
-        ...prev,
-        accounts: [newAccount, ...prev.accounts],
-      }));
+      // Persist first so the tracking call only fires once the account is
+      // actually saved, not merely when the form was submitted.
+      const nextAccounts = [newAccount, ...accounts];
+      const saved = saveAccounts(nextAccounts);
+      if (!saved) return;
+
+      setPersisted((prev) => ({ ...prev, accounts: nextAccounts }));
       amplitude.track("Account_Added", { save: input.serviceName });
       say(randomMessage(MESSAGES.addAccount));
     },
-    [say],
+    [accounts, say],
   );
 
   const updateAccount = useCallback(
