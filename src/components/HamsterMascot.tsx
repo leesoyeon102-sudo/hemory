@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 import { useApp } from "@/context/app-context";
 import { MESSAGES, randomMessage } from "@/lib/messages";
 
@@ -40,7 +41,11 @@ export function HamsterMascot() {
       )}
       <button
         type="button"
-        onClick={() => say(randomMessage(MESSAGES.click))}
+        onClick={() => {
+          const message = randomMessage(MESSAGES.click);
+          amplitude.track("Hamster_Interacted", { click: message });
+          say(message);
+        }}
         aria-label="햄스터 캐릭터"
         className={`pointer-events-auto animate-[bob_2.2s_ease-in-out_infinite] text-4xl drop-shadow transition-transform hover:scale-110 active:scale-95 sm:text-5xl ${
           facingLeft ? "-scale-x-100" : ""

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import * as amplitude from "@amplitude/analytics-browser";
 
 const NAV_ITEMS = [
   { href: "/", label: "홈" },
@@ -25,6 +26,11 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={
+                item.href === "/logs"
+                  ? () => amplitude.track("Tap_Clicked", { log: "logs_page" })
+                  : undefined
+              }
               className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
                 pathname === item.href
                   ? "bg-amber-400 text-white"

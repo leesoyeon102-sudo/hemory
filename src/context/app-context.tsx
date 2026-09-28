@@ -10,6 +10,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import * as amplitude from "@amplitude/analytics-browser";
 import type { Account, AccountInput, ActionType, ForgetLog } from "@/lib/types";
 import { loadAccounts, loadLogs, saveAccounts, saveLogs } from "@/lib/storage";
 import { MESSAGES, randomMessage } from "@/lib/messages";
@@ -92,6 +93,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         ...prev,
         accounts: [newAccount, ...prev.accounts],
       }));
+      amplitude.track("Account_Added", { save: input.serviceName });
       say(randomMessage(MESSAGES.addAccount));
     },
     [say],
@@ -126,10 +128,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const recordAction = useCallback(
     (accountId: string, actionType: ActionType) => {
-      setPersisted((prev) => {
-        const account = prev.accounts.find((item) => item.id === accountId);
-        if (!account) return prev;
+      const account = accounts.find((item) => item.id === accountId);
+      if (!account) return;
 
+      setPersisted((prev) => {
         const newLog: ForgetLog = {
           id: crypto.randomUUID(),
           accountId,
@@ -148,9 +150,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           logs: [newLog, ...prev.logs].slice(0, 500),
         };
       });
+
+      if (actionType === "copy_password") {
+        amplitude.track("Credential_Forgotten", { copy: account.serviceName });
+      }
+
       say(randomMessage(actionType === "view" ? MESSAGES.view : MESSAGES.copy));
     },
-    [say],
+    [accounts, say],
   );
 
   const getAccount = useCallback(
